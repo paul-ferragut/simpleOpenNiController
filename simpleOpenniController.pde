@@ -18,11 +18,15 @@ boolean playRecording=false;
 
 ArrayList<PVector> userData = new ArrayList<PVector>();
 
-ArrayList<ArrayList<PVector>>trail= new ArrayList<ArrayList<PVector>>();
+//ArrayList<ArrayList<PVector>>trail= new ArrayList<ArrayList<PVector>>();
 
 
-IntList userID;
+//IntList userID;
 
+ArrayList<ArrayList<PVector>> positionsForAllUsers = new ArrayList<ArrayList<PVector>>();
+int[] clrs = {color(255,0,0),color(0,255,0),color(0,0,255)};
+int user = 0;
+int maxUsers = 5;//let's test 3 lists of points for now
 //ArrayList<float>userID = new ArrayList<float>();
 
 //ArrayList<Integer> arl = new ArrayList<Integer>();
@@ -56,8 +60,11 @@ public class userObj {
 
 void setup(){
   
-  userID = new IntList();
-   
+  //userID = new IntList();
+   for(int i = 0 ; i < maxUsers ; i++){ 
+   positionsForAllUsers.add(new ArrayList<PVector>());
+ 
+ }//initialize array list of pos. per user
   
   size(1024,768,P3D);
   textFont(createFont("Arial",48));
@@ -160,8 +167,8 @@ void draw()
   
   //check validity of user id
  
-println("size"+trail.size()+" user nb"+users.length+" size:"+userID.size());
- 
+//println("size"+trail.size()+" user nb"+users.length+" size:"+userID.size());
+ /*
   for(int i = 0 ; i <users.length ; i++){
     boolean valid= false;
     boolean checked=false;
@@ -178,7 +185,7 @@ println("size"+trail.size()+" user nb"+users.length+" size:"+userID.size());
     userID.remove(i);
     }
   }
-
+*/
   
   for(int i = 0 ; i < users.length; i++){
     
@@ -189,8 +196,15 @@ println("size"+trail.size()+" user nb"+users.length+" size:"+userID.size());
     box(10);
     popMatrix();
     
+    
+          user=i;
+        if(user > 0 && com.x!=0 && com.y!=0 && com.z!=0){
+    //array index is off by 1 compared to openni users
+    positionsForAllUsers.get(user-1).add(new PVector(com.x,com.y,com.z));
+        }
+    
     //trail
-
+/*
    if(trail.size()!=users.length)println("Error array size"+trail.size()+" user nb"+users.length);
    
   
@@ -218,7 +232,9 @@ println("size"+trail.size()+" user nb"+users.length+" size:"+userID.size());
           line(tempVPrev.x,tempVPrev.y,tempVPrev.z,tempV.x,tempV.y,tempV.z);
         }
       }
-      
+      */
+
+  
   
     
     
@@ -265,6 +281,22 @@ println("size"+trail.size()+" user nb"+users.length+" size:"+userID.size());
   popMatrix();
   */
   
+ // background(255);
+  beginShape(POINTS);
+  //println("size"+positionsForAllUsers.size());
+  for(int i = 0 ; i < positionsForAllUsers.size(); i++){//for each user's list of points
+    ArrayList<PVector> ppu = positionsForAllUsers.get(i);//get the points per user list
+   stroke(color(255,0,0));
+    
+    for(int j = 0 ; j < ppu.size(); j++){//for each point in a user's list
+      PVector pos = ppu.get(j);
+      vertex(pos.x,pos.y,pos.z);
+    }
+    
+  }
+  
+  endShape();
+  
     popMatrix();
   
   
@@ -275,17 +307,20 @@ void onNewUser(int userId){
   println("detected" + userId);
 
   userN = userId;
-           
+           /*
            ArrayList<PVector> tempArray = new ArrayList<PVector>();
            trail.add(tempArray);
            userID.append(userId);
+           */
            
 }
 void onLostUser(int userId){
   println("lost: " + userId);
   userN = userId;
+          /*
           trail.remove(userId);
           userID.remove(userId);
+          */
 }
 
 
