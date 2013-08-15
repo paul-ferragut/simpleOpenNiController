@@ -18,7 +18,15 @@ boolean playRecording=false;
 
 ArrayList<PVector> userData = new ArrayList<PVector>();
 
-ArrayList<ArrayList<PVector>> trail= new ArrayList<ArrayList<PVector>>();
+ArrayList<ArrayList<PVector>>trail= new ArrayList<ArrayList<PVector>>();
+
+
+IntList userID;
+
+//ArrayList<float>userID = new ArrayList<float>();
+
+//ArrayList<Integer> arl = new ArrayList<Integer>();
+
 /*
 public class userObj {
   
@@ -48,7 +56,7 @@ public class userObj {
 
 void setup(){
   
-  
+  userID = new IntList();
    
   
   size(1024,768,P3D);
@@ -94,7 +102,7 @@ void setup(){
 void draw()
 {
   
-  currentTime++;
+  currentTime=millis();
   context.update();//update kinect
   //clear and do scene transformation(translation,rotation,scale)
   background(0,0,0);
@@ -149,7 +157,29 @@ void draw()
  
    //DRAW CENTER OF MASS AND TRAIL
   int[] users = context.getUsers();
-  //println("user number"+users.length);
+  
+  //check validity of user id
+ 
+println("size"+trail.size()+" user nb"+users.length+" size:"+userID.size());
+ 
+  for(int i = 0 ; i <users.length ; i++){
+    boolean valid= false;
+    boolean checked=false;
+   
+    for(int j=0;j<userID.size();j++){
+      checked=true;
+      if(userID.get(j)==i){
+      valid=true;
+      }
+    }
+    if(valid==false && checked==true && i!=0){
+    println("invalid;"+i);
+    trail.remove(i);
+    userID.remove(i);
+    }
+  }
+
+  
   for(int i = 0 ; i < users.length; i++){
     
     PVector com = new PVector();
@@ -161,10 +191,10 @@ void draw()
     
     //trail
 
-   if(trail.size()!=users.length)println("Error array size");
+   if(trail.size()!=users.length)println("Error array size"+trail.size()+" user nb"+users.length);
    
   
-  if(currentTime-timing>400){
+    if(currentTime-timing>100){
           //println("add trail");
           PVector ptTrail = new PVector(com.x,com.y,com.z);
           //user.set(i).trail.bottom=2;
@@ -183,7 +213,7 @@ void draw()
         stroke(userColors[i]);
         box(5); 
         popMatrix(); 
-        if(j>0){
+        if(j>=1){
           PVector tempVPrev=trail.get(i).get(j-1);
           line(tempVPrev.x,tempVPrev.y,tempVPrev.z,tempV.x,tempV.y,tempV.z);
         }
@@ -243,16 +273,19 @@ void draw()
 //OpenNI basic user events
 void onNewUser(int userId){
   println("detected" + userId);
+
   userN = userId;
            
            ArrayList<PVector> tempArray = new ArrayList<PVector>();
-           
            trail.add(tempArray);
+           userID.append(userId);
+           
 }
 void onLostUser(int userId){
   println("lost: " + userId);
-  userN = 0;
+  userN = userId;
           trail.remove(userId);
+          userID.remove(userId);
 }
 
 
