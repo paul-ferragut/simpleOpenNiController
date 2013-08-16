@@ -18,45 +18,11 @@ boolean playRecording=false;
 
 ArrayList<PVector> userData = new ArrayList<PVector>();
 
-//ArrayList<ArrayList<PVector>>trail= new ArrayList<ArrayList<PVector>>();
-
-
-//IntList userID;
-
 ArrayList<ArrayList<PVector>> positionsForAllUsers = new ArrayList<ArrayList<PVector>>();
 int[] clrs = {color(255,0,0),color(0,255,0),color(0,0,255)};
 int user = 0;
 int maxUsers = 5;//let's test 3 lists of points for now
-//ArrayList<float>userID = new ArrayList<float>();
 
-//ArrayList<Integer> arl = new ArrayList<Integer>();
-
-/*
-public class userObj {
-  
-  PVector centerOfMass;
-  PVector top;
-  PVector bottom;
-  int openNIID;
-  int assignedID;
-  //ArrayList<PVector> trail= new ArrayList<PVector>();
-  
-  
-  public userObj( PVector centerOfMass,PVector top,PVector bottom,int assignedID) //ArrayList<PVector> trail
-  {
-    this.centerOfMass=centerOfMass;
-    this.top=top;
-    this.bottom=bottom;
-    this.assignedID=assignedID;
-  }
-  
-}
-*/
-
-//ArrayList<userObj>user= new ArrayList<userObj>();
-//ArrayList<ArrayList<PVector>> trail= new ArrayList<ArrayList<PVector>>();
-  //ArrayList<PVector>[]trail=
-//  ArrayList<PVector> trail= new ArrayList<PVector>();
 
 void setup(){
   
@@ -167,25 +133,7 @@ void draw()
   
   //check validity of user id
  
-//println("size"+trail.size()+" user nb"+users.length+" size:"+userID.size());
- /*
-  for(int i = 0 ; i <users.length ; i++){
-    boolean valid= false;
-    boolean checked=false;
-   
-    for(int j=0;j<userID.size();j++){
-      checked=true;
-      if(userID.get(j)==i){
-      valid=true;
-      }
-    }
-    if(valid==false && checked==true && i!=0){
-    println("invalid;"+i);
-    trail.remove(i);
-    userID.remove(i);
-    }
-  }
-*/
+
   
   for(int i = 0 ; i < users.length; i++){
     
@@ -202,41 +150,6 @@ void draw()
     //array index is off by 1 compared to openni users
     positionsForAllUsers.get(user-1).add(new PVector(com.x,com.y,com.z));
         }
-    
-    //trail
-/*
-   if(trail.size()!=users.length)println("Error array size"+trail.size()+" user nb"+users.length);
-   
-  
-    if(currentTime-timing>100){
-          //println("add trail");
-          PVector ptTrail = new PVector(com.x,com.y,com.z);
-          //user.set(i).trail.bottom=2;
-         
-         trail.get(i).add(ptTrail);
-           
-          timing=currentTime;
-          //println("add trail");
-      }
-     
-      for(int j=0;j<trail.get(i).size();j++){
-        
-        PVector tempV=trail.get(i).get(j);
-        pushMatrix();
-        translate(tempV.x,tempV.y,tempV.z);
-        stroke(userColors[i]);
-        box(5); 
-        popMatrix(); 
-        if(j>=1){
-          PVector tempVPrev=trail.get(i).get(j-1);
-          line(tempVPrev.x,tempVPrev.y,tempVPrev.z,tempV.x,tempV.y,tempV.z);
-        }
-      }
-      */
-
-  
-  
-    
     
     PVector ud;
     if(userData.size() >= users[i]) {
@@ -255,31 +168,6 @@ void draw()
   
   // draw the kinect cam
   context.drawCamFrustum();
- 
-  /* 
-  // draw the floor
-  PVector floorCenter = new PVector();
-  PVector floorNormal = new PVector();
-  PVector floorEnd = new PVector();
-  
-  context.getSceneFloor(floorCenter,floorNormal);
-  floorEnd = PVector.add(floorCenter,PVector.mult(floorNormal,1000));
-  println(floorCenter + " - " + floorEnd);
-  pushStyle();
-    strokeWeight(8);
-    stroke(0,255,255);
-    line(floorCenter.x,floorCenter.y,floorCenter.z,floorEnd.x,floorEnd.y,floorEnd.z);
-     stroke(0,255,100);     
-    line(floorEnd.x,floorEnd.y,floorEnd.z,0,0,0);
-  popStyle();
-  */
-  
-  /*DRAW DEPTH CAMERA
-  popMatrix();
-  pushMatrix();//2D
-  image(context.sceneImage(),0,0,320,240);
-  popMatrix();
-  */
   
  // background(255);
   beginShape(POINTS);
@@ -307,20 +195,13 @@ void onNewUser(int userId){
   println("detected" + userId);
 
   userN = userId;
-           /*
-           ArrayList<PVector> tempArray = new ArrayList<PVector>();
-           trail.add(tempArray);
-           userID.append(userId);
-           */
+
            
 }
 void onLostUser(int userId){
   println("lost: " + userId);
+  
   userN = userId;
-          /*
-          trail.remove(userId);
-          userID.remove(userId);
-          */
 }
 
 
